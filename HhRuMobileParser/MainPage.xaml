@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HhRuMobileParser.MainPage">
+    <ContentPage.Content>
+        <ScrollView Orientation="Vertical">
+
+            <StackLayout Orientation="Vertical">
+                <CollectionView x:Name="vacanciesCollectionView" SelectionMode="Single" 
+                            ItemsSource="{Binding Vacancies}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="5,5,5,5">
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding Address}" TextColor="Black" Margin="5,5,5,5" LineBreakMode="WordWrap" FontSize="Micro"/>
+                                    <Label Text="{Binding Responsibility}" TextColor="Black" Margin="5,5,5,5" LineBreakMode="WordWrap" FontSize="Micro"/>
+                                    <Label Text="{Binding Requirement}" TextColor="Black" Margin="5,5,5,5" LineBreakMode="WordWrap" FontSize="Micro"/>
+                                    <Label Text="{Binding VacancyURL}" TextColor="Black" Margin="5,5,5,5" LineBreakMode="WordWrap" FontSize="Micro"/>
+                                    <Label Text="{Binding CompanyURL}" TextColor="Black" Margin="5,5,5,5" LineBreakMode="WordWrap" FontSize="Micro"/>
+                                    <Label Text="{Binding CompanyName}" TextColor="Black" Margin="5,5,5,5" LineBreakMode="WordWrap" FontSize="Micro"/>
+                                </StackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <StackLayout Orientation="Horizontal" HeightRequest="80">
+                    <Button x:Name="btnUploadVacanciesToSQLiteFromAPI" Text="Загрузить из сети"/>
+                    <Button x:Name="btnGetVacanciesFromSQLite" Text="Загрузить с устройства"/>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
+                        

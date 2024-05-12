@@ -1,0 +1,5 @@
+﻿.vs
+HhRuMobileParser/bin
+HhRuMobileParser/obj
+*.sln
+HhRuMobileParser/HhRuMobileParser.csproj.user
