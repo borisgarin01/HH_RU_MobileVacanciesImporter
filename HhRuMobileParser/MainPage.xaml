@@ -24,8 +24,8 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
                 <StackLayout Orientation="Horizontal" HeightRequest="80">
-                    <Button x:Name="btnUploadVacanciesToSQLiteFromAPI" Text="Загрузить из сети"/>
-                    <Button x:Name="btnGetVacanciesFromSQLite" Text="Загрузить с устройства"/>
+                    <Button Command="{Binding UploadVacanciesToSQLiteFromAPICommand}" Text="Загрузить из сети"/>
+                    <Button Command ="{Binding GetVacanciesFromSQLiteCommand}" Text="Загрузить с устройства"/>
                 </StackLayout>
             </StackLayout>
         </ScrollView>

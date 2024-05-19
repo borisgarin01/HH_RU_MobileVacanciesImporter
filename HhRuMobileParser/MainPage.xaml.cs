@@ -4,6 +4,7 @@ using MvvmHelpers.Commands;
 using SQLite;
 using System.Net.Http.Json;
 using System.Text;
+using System.Windows.Input;
 
 namespace HhRuMobileParser;
 
@@ -13,12 +14,19 @@ public partial class MainPage : ContentPage
     HttpClient httpClient = new HttpClient();
     SQLiteAsyncConnection sqliteAsyncConnection = new SQLiteAsyncConnection(DatabasePathHolder.DatabasePath);
     public IEnumerable<Vacancy> Vacancies { get; private set; }
+
+    public ICommand GetVacanciesFromSQLiteCommand { get; set; }
+    public ICommand UploadVacanciesToSQLiteFromAPICommand { get; set; }
+
+
+
     public MainPage()
     {
         httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
+        BindingContext = this;
+        GetVacanciesFromSQLiteCommand = new AsyncCommand(GetVacanciesFromSQLite);
+        UploadVacanciesToSQLiteFromAPICommand = new AsyncCommand(UploadVacanciesToSQLiteFromAPI);
         InitializeComponent();
-        btnGetVacanciesFromSQLite.Command = new AsyncCommand(GetVacanciesFromSQLite);
-        btnUploadVacanciesToSQLiteFromAPI.Command = new AsyncCommand(UploadVacanciesToSQLiteFromAPI);
     }
 
     private async Task UploadVacanciesToSQLiteFromAPI()
