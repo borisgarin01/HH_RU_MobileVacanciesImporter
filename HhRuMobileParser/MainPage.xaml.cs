@@ -10,7 +10,7 @@ namespace HhRuMobileParser;
 
 public partial class MainPage : ContentPage
 {
-    int count = 0;
+    int page = 0;
     HttpClient httpClient = new HttpClient();
     SQLiteAsyncConnection sqliteAsyncConnection = new SQLiteAsyncConnection(DatabasePathHolder.DatabasePath);
     public IEnumerable<Vacancy> Vacancies { get; private set; }
@@ -18,8 +18,13 @@ public partial class MainPage : ContentPage
     public ICommand GetVacanciesFromSQLiteCommand { get; set; }
     public ICommand UploadVacanciesToSQLiteFromAPICommand { get; set; }
 
+    StringBuilder address = new StringBuilder();
 
-
+    private string companyName;
+    private string companyURL;
+    private string requirement;
+    private string responsibility;
+    private string vacancyURL;
     public MainPage()
     {
         httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
@@ -31,63 +36,68 @@ public partial class MainPage : ContentPage
 
     private async Task UploadVacanciesToSQLiteFromAPI()
     {
-        var root = await httpClient.GetFromJsonAsync<Root>("https://api.hh.ru/vacancies?text=C%23&search_field=name&employment=full&schedule=remote");
-
-        var vacanciesWithAllegedURLtoCheckExistanceInSQLiteDatabase = await sqliteAsyncConnection.QueryAsync<Vacancy>("SELECT * FROM Vacancies");
-
-        foreach (var item in root.Items)
+        GC.Collect();
+        try
         {
-            var vacancy = new Vacancy();
-            var address = new StringBuilder();
-            string companyName = string.Empty;
-            string companyURL = string.Empty;
-            string requirement = string.Empty;
-            string responsibility = string.Empty;
-            string vacancyURL = string.Empty;
+            Root root = await httpClient.GetFromJsonAsync<Root>($"https://api.hh.ru/vacancies?text=C%23&search_field=name&employment=full&schedule=remote&page={page}");
 
-            if (item.Address != null)
+            page++;
+
+            var vacanciesWithAllegedURLtoCheckExistanceInSQLiteDatabase = (await sqliteAsyncConnection.QueryAsync<Vacancy>("SELECT * FROM Vacancies")).ToArray();
+
+            foreach (var item in root.Items)
             {
-                if (!string.IsNullOrWhiteSpace(item.Address.City))
-                    address.Append(item.Address.City);
-                if (!string.IsNullOrWhiteSpace(item.Address.Street))
-                    address.Append(item.Address.Street);
-                if (!string.IsNullOrWhiteSpace(item.Address.Building))
-                    address.Append(item.Address.Building);
-            }
-            if (!string.IsNullOrWhiteSpace(item.Employer.Name))
-            {
-                companyName = item.Employer.Name;
-            }
-            if (!string.IsNullOrWhiteSpace(item.Employer.Url))
-            {
-                companyURL = item.Employer.Url;
-            }
-            if (item.Snippet is not null)
-            {
-                if (!string.IsNullOrWhiteSpace(item.Snippet.Responsibility))
+                if (item.Address != null)
                 {
-                    responsibility = item.Snippet.Responsibility;
+                    if (!string.IsNullOrWhiteSpace(item.Address.City))
+                        address.Append(item.Address.City);
+                    if (!string.IsNullOrWhiteSpace(item.Address.Street))
+                        address.Append(item.Address.Street);
+                    if (!string.IsNullOrWhiteSpace(item.Address.Building))
+                        address.Append(item.Address.Building);
                 }
-                if (!string.IsNullOrWhiteSpace(item.Snippet.Requirement))
+                if (!string.IsNullOrWhiteSpace(item.Employer.Name))
                 {
-                    requirement = item.Snippet.Requirement;
+                    companyName = item.Employer.Name;
                 }
-            }
-            vacancyURL = item.Url;
-
-
-            if (vacanciesWithAllegedURLtoCheckExistanceInSQLiteDatabase.FirstOrDefault(a => a.VacancyURL == vacancyURL) is null)
-                await sqliteAsyncConnection.InsertAsync(new Vacancy
+                if (!string.IsNullOrWhiteSpace(item.Employer.Url))
                 {
-                    Address = address.ToString(),
-                    CompanyName = companyName,
-                    CompanyURL = companyURL,
-                    Requirement = requirement,
-                    Responsibility = responsibility,
-                    VacancyURL = vacancyURL
-                });
+                    companyURL = item.Employer.Url;
+                }
+                if (item.Snippet is not null)
+                {
+                    if (!string.IsNullOrWhiteSpace(item.Snippet.Responsibility))
+                    {
+                        responsibility = item.Snippet.Responsibility;
+                    }
+                    if (!string.IsNullOrWhiteSpace(item.Snippet.Requirement))
+                    {
+                        requirement = item.Snippet.Requirement;
+                    }
+                }
+                vacancyURL = item.Url;
+
+
+                if (vacanciesWithAllegedURLtoCheckExistanceInSQLiteDatabase.FirstOrDefault(a => a.VacancyURL == vacancyURL) is null)
+                    await sqliteAsyncConnection.InsertAsync(new Vacancy
+                    {
+                        Address = address.ToString(),
+                        CompanyName = companyName,
+                        CompanyURL = companyURL,
+                        Requirement = requirement,
+                        Responsibility = responsibility,
+                        VacancyURL = vacancyURL
+                    });
+                address.Clear();
+            }
+            await UploadVacanciesToSQLiteFromAPI();
+            GC.Collect();
         }
-        await GetVacanciesFromSQLite();
+        catch
+        {
+            page = 0;
+            await GetVacanciesFromSQLite();
+        }
     }
 
     protected override void OnAppearing()
@@ -97,7 +107,9 @@ public partial class MainPage : ContentPage
 
     private async Task GetVacanciesFromSQLite()
     {
-        Vacancies = await sqliteAsyncConnection.Table<Vacancy>().ToListAsync();
+        GC.Collect();
+        Vacancies = await sqliteAsyncConnection.Table<Vacancy>().ToArrayAsync();
         vacanciesCollectionView.ItemsSource = Vacancies;
+        GC.Collect();
     }
 }
