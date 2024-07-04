@@ -1,23 +1,15 @@
-﻿using HhRuMobileParser.Models;
-using HhRuMobileParser.Models.DTOs;
-using SQLite;
+﻿namespace HhRuMobileParser;
 
-namespace HhRuMobileParser
+public partial class App : Application
 {
-    public partial class App : Application
+    public App()
     {
-        SQLiteAsyncConnection sqliteAsyncConnection = new SQLiteAsyncConnection(DatabasePathHolder.DatabasePath);
+        InitializeComponent();
 
-        public App()
-        {
-            InitializeComponent();
-
-            MainPage = new AppShell();
-        }
-        protected override async void OnStart()
-        {
-            base.OnStart();
-            await sqliteAsyncConnection.CreateTableAsync<Vacancy>();
-        }
+        MainPage = new AppShell();
+    }
+    protected override async void OnStart()
+    {
+        base.OnStart();
     }
 }
