@@ -17,6 +17,8 @@
                                 <Label Text="{Binding Address.City}" Margin="5,5,5,5"/>
                                 <Label Text="{Binding Employer.Name}" Margin="5,5,5,5"/>
                                 <Label Text="{Binding Employer.Url}" Margin="5,5,5,5"/>
+                                <Label Text="{Binding Snippet.Responsibility}" Margin="5,5,5,5"/>
+                                <Label Text="{Binding Snippet.Requirement}" Margin="5,5,5,5"/>
                             </VerticalStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
