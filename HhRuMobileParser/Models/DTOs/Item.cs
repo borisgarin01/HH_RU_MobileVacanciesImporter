@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
-using SQLite;
 
 namespace HhRuMobileParser.Models.DTOs;
 
-[Table("Items")]
 public class Item
 {
     [JsonProperty("id")]

@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
-using SQLite;
 
 namespace HhRuMobileParser.Models.DTOs;
 
-[Table("Types")]
 public class Type
 {
     [JsonProperty("id")]

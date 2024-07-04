@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
-using SQLite;
 
 namespace HhRuMobileParser.Models.DTOs;
 
-[Table("LogoUrls")]
 public class LogoUrls
 {
     [JsonProperty("90")]

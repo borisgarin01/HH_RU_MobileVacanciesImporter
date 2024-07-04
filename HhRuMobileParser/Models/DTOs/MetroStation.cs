@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
-using SQLite;
 
 namespace HhRuMobileParser.Models.DTOs;
 
-[Table("MetrosStations")]
 public class MetroStation
 {
     [JsonProperty("station_name")]
