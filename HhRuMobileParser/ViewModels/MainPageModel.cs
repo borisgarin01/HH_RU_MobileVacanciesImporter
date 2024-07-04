@@ -52,18 +52,23 @@ public class MainPageModel : BaseViewModel
             }
             else
             {
-                DisplayParsedData();
+                await DisplayImportDataWithImportingToSQLite(VacanciesToAgregate);
             }
         }
         else
         {
-            DisplayParsedData();
+            await DisplayImportDataWithImportingToSQLite(VacanciesToAgregate);
         }
     }
 
-    private void DisplayParsedData()
+    private async Task DisplayImportDataWithImportingToSQLite(IEnumerable<Item> items)
     {
-        VacanciesObservableCollection = new ObservableCollection<Item>(VacanciesToAgregate);
+        DisplayParsedData(items);
+    }
+
+    private void DisplayParsedData(IEnumerable<Item> items)
+    {
+        VacanciesObservableCollection = new ObservableCollection<Item>(items);
         OnPropertyChanged(nameof(VacanciesObservableCollection));
     }
 }
