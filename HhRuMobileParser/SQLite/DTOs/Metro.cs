@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using SQLite;
-using System.ComponentModel;
 
 namespace HhRuMobileParser.SQLite.DTOs;
 

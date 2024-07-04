@@ -27,5 +27,5 @@ public class Address
     public string Raw { get; set; }
 
     public long MetroId { get; set; }
-   
+
 }
