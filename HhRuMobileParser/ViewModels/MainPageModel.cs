@@ -33,33 +33,6 @@ public class MainPageModel : BaseViewModel
                 SearchFields = ["name", "description"],
                 Text = "C#",
                 Experience = "noExperience"
-            },
-            new GetVacanciesQueryObject
-            {
-                Employment = "full",
-                Page = 0,
-                Schedule = "remote",
-                SearchFields = ["name", "description"],
-                Text = "C#",
-                Experience = "between1And3"
-            },
-            new GetVacanciesQueryObject
-            {
-                Employment = "full",
-                Page = 0,
-                Schedule = "remote",
-                SearchFields = ["name", "description"],
-                Text = ".NET",
-                Experience = "noExperience"
-            },
-            new GetVacanciesQueryObject
-            {
-                Employment = "full",
-                Page = 0,
-                Schedule = "remote",
-                SearchFields = ["name", "description"],
-                Text = ".NET",
-                Experience = "between1And3"
             }
         ];
     }
