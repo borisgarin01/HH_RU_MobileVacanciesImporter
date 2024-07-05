@@ -39,12 +39,18 @@ public class MainPageModel : BaseViewModel
 
     private async Task GetVacanciesFromNetwork(GetVacanciesQueryObject[] getVacanciesQueryObjects)
     {
+        IsNotBusy = false;
+        OnPropertyChanged(nameof(IsNotBusy));
+
         foreach (var getVacanciesQueryObject in getVacanciesQueryObjects)
         {
             await GetVacanciesFromNetwork(getVacanciesQueryObject);
         }
 
         await DisplayImportDataWithImportingToSQLite(VacanciesToAgregate);
+
+        IsNotBusy = true;
+        OnPropertyChanged(nameof(IsNotBusy));
     }
 
     private async Task GetVacanciesFromNetwork(GetVacanciesQueryObject getVacanciesQueryObject)
