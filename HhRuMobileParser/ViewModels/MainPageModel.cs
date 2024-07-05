@@ -11,31 +11,73 @@ namespace HhRuMobileParser.ViewModels;
 
 public class MainPageModel : BaseViewModel
 {
-    public IAsyncCommand<GetVacanciesQueryObject> GetVacanciesFromNetworkCommand { get; init; }
+    public IAsyncCommand<GetVacanciesQueryObject[]> GetVacanciesFromNetworkCommand { get; init; }
     public ObservableCollection<Item> VacanciesObservableCollection { get; private set; }
-    public GetVacanciesQueryObject GetVacanciesQueryObject { get; private set; }
+    public GetVacanciesQueryObject[] GetVacanciesQueryObjects { get; private set; }
     private List<Item> VacanciesToAgregate = new();
+
+    HttpClient httpClient = new();
+
     public MainPageModel()
     {
-        GetVacanciesFromNetworkCommand = new AsyncCommand<GetVacanciesQueryObject>(GetVacanciesFromNetwork);
-        GetVacanciesQueryObject = new GetVacanciesQueryObject
+        httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
+
+        GetVacanciesFromNetworkCommand = new AsyncCommand<GetVacanciesQueryObject[]>(GetVacanciesFromNetwork);
+        GetVacanciesQueryObjects =
+        [
+            new GetVacanciesQueryObject
+            {
+                Employment = "full",
+                Page = 0,
+                Schedule = "remote",
+                SearchFields = ["name", "description"],
+                Text = "C#",
+                Experience = "noExperience"
+            },
+            new GetVacanciesQueryObject
+            {
+                Employment = "full",
+                Page = 0,
+                Schedule = "remote",
+                SearchFields = ["name", "description"],
+                Text = "C#",
+                Experience = "between1And3"
+            },
+            new GetVacanciesQueryObject
+            {
+                Employment = "full",
+                Page = 0,
+                Schedule = "remote",
+                SearchFields = ["name", "description"],
+                Text = ".NET",
+                Experience = "noExperience"
+            },
+            new GetVacanciesQueryObject
+            {
+                Employment = "full",
+                Page = 0,
+                Schedule = "remote",
+                SearchFields = ["name", "description"],
+                Text = ".NET",
+                Experience = "between1And3"
+            }
+        ];
+    }
+
+    private async Task GetVacanciesFromNetwork(GetVacanciesQueryObject[] getVacanciesQueryObjects)
+    {
+        foreach (var getVacanciesQueryObject in getVacanciesQueryObjects)
         {
-            Employment = "full",
-            Page = 0,
-            Schedule = "remote",
-            SearchFields = ["name", "description"],
-            Text = "C#",
-            Experience = "noExperience"
-        };
+            await GetVacanciesFromNetwork(getVacanciesQueryObject);
+        }
+
+        await DisplayImportDataWithImportingToSQLite(VacanciesToAgregate);
     }
 
     private async Task GetVacanciesFromNetwork(GetVacanciesQueryObject getVacanciesQueryObject)
     {
-        var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
-
         var searchFields =
-            string.Join('&', getVacanciesQueryObject.SearchFields.Select(a => $"search_field={a}"));
+        string.Join('&', getVacanciesQueryObject.SearchFields.Select(a => $"search_field={a}"));
 
         var url = $"https://api.hh.ru/vacancies?text={HttpUtility.UrlEncode(getVacanciesQueryObject.Text)}&employment={getVacanciesQueryObject.Employment}&schedule={getVacanciesQueryObject.Schedule}&experience={getVacanciesQueryObject.Experience}&page={getVacanciesQueryObject.Page}&{searchFields}";
 
@@ -52,12 +94,12 @@ public class MainPageModel : BaseViewModel
             }
             else
             {
-                await DisplayImportDataWithImportingToSQLite(VacanciesToAgregate);
+                return;
             }
         }
         else
         {
-            await DisplayImportDataWithImportingToSQLite(VacanciesToAgregate);
+            return;
         }
     }
 

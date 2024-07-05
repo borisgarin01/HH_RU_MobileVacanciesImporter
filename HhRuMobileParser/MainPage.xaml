@@ -12,18 +12,28 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="dtos:Item">
                             <VerticalStackLayout Margin="5,5,5,5">
-                                <Label Text="{Binding Name}" Margin="5,5,5,5"/>
-                                <Label Text="{Binding Url}" Margin="5,5,5,5"/>
-                                <Label Text="{Binding Address.City}" Margin="5,5,5,5"/>
-                                <Label Text="{Binding Employer.Name}" Margin="5,5,5,5"/>
-                                <Label Text="{Binding Employer.Url}" Margin="5,5,5,5"/>
-                                <Label Text="{Binding Snippet.Responsibility}" Margin="5,5,5,5"/>
-                                <Label Text="{Binding Snippet.Requirement}" Margin="5,5,5,5"/>
+                                <VerticalStackLayout Margin="5,5,5,5">
+                                    <Label Text="{Binding Name}" Margin="5,5,5,5"/>
+                                    <Label Text="{Binding AlternateUrl}" Margin="5,5,5,5"/>
+                                    <Label Text="{Binding Address.City}" Margin="5,5,5,5"/>
+                                    <Label Text="{Binding Employer.Name}" Margin="5,5,5,5"/>
+                                    <Label Text="{Binding Employer.AlternateUrl}" Margin="5,5,5,5"/>
+                                    <Label Text="{Binding Snippet.Responsibility}" Margin="5,5,5,5"/>
+                                    <Label Text="{Binding Snippet.Requirement}" Margin="5,5,5,5"/>
+                                    <Label Text="{Binding Experience.Name}" Margin="5,5,5,5"/>
+                                    <HorizontalStackLayout Margin="5,5,5,5">
+                                        <Label Text="{Binding Salary.From}" Margin="5,5,5,5"/>
+                                        <Label Text=" - " Margin="5,5,5,5"/>
+                                        <Label Text="{Binding Salary.To}" Margin="5,5,5,5"/>
+                                        <Label Text="{Binding Salary.Currency}"/>
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                                <Line/>
                             </VerticalStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <Button Text="Upload vacancies" Command="{Binding GetVacanciesFromNetworkCommand}" CommandParameter="{Binding GetVacanciesQueryObject}" Margin="5,5,5,5" VerticalOptions="End" WidthRequest="200" HeightRequest="50"/>
+                <Button Text="Upload vacancies" Command="{Binding GetVacanciesFromNetworkCommand}" CommandParameter="{Binding GetVacanciesQueryObjects}" Margin="5,5,5,5" VerticalOptions="End" WidthRequest="200" HeightRequest="50"/>
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>
