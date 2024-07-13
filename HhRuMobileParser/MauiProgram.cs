@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using HhRuMobileParser.SQLite;
+using Microsoft.Extensions.Logging;
+using Models.Http;
 
 namespace HhRuMobileParser
 {
@@ -7,6 +9,9 @@ namespace HhRuMobileParser
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+            builder.Services.AddSingleton<VacanciesRequesterAndExtractorFromHttpResponse>();
+            builder.Services.AddSingleton<VacanciesToSQLiteImporter>();
+            builder.Services.AddSingleton<MainPage>();
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
@@ -14,7 +19,6 @@ namespace HhRuMobileParser
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

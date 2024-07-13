@@ -57,11 +57,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="FluentMigrator" Version="5.2.0" />
+	  <PackageReference Include="FluentMigrator.Runner.SQLite" Version="5.2.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 	  <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Models\Models.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="MainPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadUnhandledDeviceExceptionHhRuMobileParserHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 
 </Project>

@@ -1,41 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
              x:Class="HhRuMobileParser.MainPage"
-             xmlns:viewModels="clr-namespace:HhRuMobileParser.ViewModels"
-             xmlns:dtos="clr-namespace:HhRuMobileParser.Models.DTOs"
-             x:DataType="viewModels:MainPageModel">
+             xmlns:model="clr-namespace:HhRuMobileParser"
+             x:DataType="model:MainPageModel"
+             xmlns:ModelsModels="clr-namespace:Models.Models;assembly=Models"
+             Title="MainPage">
     <ContentPage.Content>
-        <ScrollView>
-            <VerticalStackLayout>
-                <CollectionView ItemsSource="{Binding VacanciesObservableCollection}" Margin="5,5,5,5">
+        <StackLayout Orientation="Vertical" Margin="5,5,5,5">
+            <Button Command="{Binding ImportVacanciesCommand}" IsEnabled="{Binding IsNotBusy}" Text="Get vacancies" WidthRequest="120" HeightRequest="40"/>
+            <ScrollView Orientation="Vertical" HeightRequest="1920">
+                <CollectionView ItemsSource="{Binding Items}">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="dtos:Item">
-                            <VerticalStackLayout Margin="5,5,5,5">
-                                <VerticalStackLayout Margin="5,5,5,5">
-                                    <Label Text="{Binding Name}" Margin="5,5,5,5"/>
-                                    <Label Text="{Binding AlternateUrl}" Margin="5,5,5,5"/>
-                                    <Label Text="{Binding Address.City}" Margin="5,5,5,5"/>
-                                    <Label Text="{Binding Employer.Name}" Margin="5,5,5,5"/>
-                                    <Label Text="{Binding Employer.AlternateUrl}" Margin="5,5,5,5"/>
-                                    <Label Text="{Binding Snippet.Responsibility}" Margin="5,5,5,5"/>
-                                    <Label Text="{Binding Snippet.Requirement}" Margin="5,5,5,5"/>
-                                    <Label Text="{Binding Experience.Name}" Margin="5,5,5,5"/>
-                                    <HorizontalStackLayout Margin="5,5,5,5">
-                                        <Label Text="{Binding Salary.From}" Margin="5,5,5,5"/>
-                                        <Label Text=" - " Margin="5,5,5,5"/>
-                                        <Label Text="{Binding Salary.To}" Margin="5,5,5,5"/>
-                                        <Label Text="{Binding Salary.Currency}"/>
-                                    </HorizontalStackLayout>
-                                </VerticalStackLayout>
-                                <Line/>
-                            </VerticalStackLayout>
+                        <DataTemplate x:DataType="ModelsModels:Item">
+                            <StackLayout Orientation="Vertical">
+                                <Label Text="{Binding Name}"/>
+                                <Label Text="{Binding AlternateUrl}"/>
+                                <Label Text="{Binding Address.City}"/>
+                                <Label Text="{Binding Snippet.Requirement}"/>
+                                <Label Text="{Binding Snippet.Responsibility}"/>
+                                <Label Text="{Binding Employer.Name}"/>
+                                <Label Text="{Binding Employer.AlternateUrl}"/>
+                            </StackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <Button Text="Upload vacancies" Command="{Binding GetVacanciesFromNetworkCommand}" IsEnabled="{Binding IsNotBusy}" CommandParameter="{Binding GetVacanciesQueryObjects}" Margin="5,5,5,5" VerticalOptions="End" WidthRequest="200" HeightRequest="50"/>
-            </VerticalStackLayout>
-        </ScrollView>
+            </ScrollView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
-                        
